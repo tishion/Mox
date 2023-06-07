@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<Import Project="..\Mox.Src\Mox.projitems" Label="Shared" />
+
+	<ItemGroup>
+	  <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+	  <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+	</ItemGroup>
+
+</Project>

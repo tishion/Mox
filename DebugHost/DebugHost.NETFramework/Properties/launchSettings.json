@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MoxDebugHost.NETFramework": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

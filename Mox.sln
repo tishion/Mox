@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Misc", ".Misc", "{280DB142-A0C9-4F70-80DA-3E6177723658}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mox", "Mox", "{90C163A8-0F5F-476C-BA9F-61B09FDBA91C}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Mox", "Mox\Mox.Src\Mox.shproj", "{35452977-2D30-4197-8F11-FD8EA887B2AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DebugHost", "DebugHost", "{D981991E-5831-4178-876A-73157D0AE857}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DebugHost", "DebugHost\DebugHost.Src\DebugHost.shproj", "{13C8D34D-1857-4C85-8ED0-B6053E65D2CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHost.NET", "DebugHost\DebugHost.NET\DebugHost.NET.csproj", "{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHost.NETFramework", "DebugHost\DebugHost.NETFramework\DebugHost.NETFramework.csproj", "{B149B67D-B30A-4EEF-BB12-C42A611F8774}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{462B462F-796D-489C-A949-1B8CDC86FD51}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MoxTests", "Example\Tests.Src\MoxTests.shproj", "{043813E9-7837-462F-B436-4034D7F0CA1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mox.NETTests", "Example\NETTests\Mox.NETTests.csproj", "{D755F530-3E0D-4724-8D37-1C071A620C8C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mox.NETFrameworkTests", "Example\NETFrameworkTests\Mox.NETFrameworkTests.csproj", "{5A13684C-8655-4DAF-90F7-B66C918B9068}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mox.NETStandard", "Mox\Mox.NETStandard\Mox.NETStandard.csproj", "{71E93442-22CF-4EDD-ACF0-510D51E6A352}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mox.NETFramework", "Mox\Mox.NETFramework\Mox.NETFramework.csproj", "{9F2667D0-59DF-49A6-9C9C-F10E3F150238}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B149B67D-B30A-4EEF-BB12-C42A611F8774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B149B67D-B30A-4EEF-BB12-C42A611F8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B149B67D-B30A-4EEF-BB12-C42A611F8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B149B67D-B30A-4EEF-BB12-C42A611F8774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D755F530-3E0D-4724-8D37-1C071A620C8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D755F530-3E0D-4724-8D37-1C071A620C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D755F530-3E0D-4724-8D37-1C071A620C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D755F530-3E0D-4724-8D37-1C071A620C8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A13684C-8655-4DAF-90F7-B66C918B9068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A13684C-8655-4DAF-90F7-B66C918B9068}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A13684C-8655-4DAF-90F7-B66C918B9068}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A13684C-8655-4DAF-90F7-B66C918B9068}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E93442-22CF-4EDD-ACF0-510D51E6A352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E93442-22CF-4EDD-ACF0-510D51E6A352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E93442-22CF-4EDD-ACF0-510D51E6A352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E93442-22CF-4EDD-ACF0-510D51E6A352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F2667D0-59DF-49A6-9C9C-F10E3F150238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F2667D0-59DF-49A6-9C9C-F10E3F150238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F2667D0-59DF-49A6-9C9C-F10E3F150238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F2667D0-59DF-49A6-9C9C-F10E3F150238}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35452977-2D30-4197-8F11-FD8EA887B2AD} = {90C163A8-0F5F-476C-BA9F-61B09FDBA91C}
+		{13C8D34D-1857-4C85-8ED0-B6053E65D2CE} = {D981991E-5831-4178-876A-73157D0AE857}
+		{9B9FE778-0B77-4889-AD38-A1B5BDAF7CE2} = {D981991E-5831-4178-876A-73157D0AE857}
+		{B149B67D-B30A-4EEF-BB12-C42A611F8774} = {D981991E-5831-4178-876A-73157D0AE857}
+		{043813E9-7837-462F-B436-4034D7F0CA1A} = {462B462F-796D-489C-A949-1B8CDC86FD51}
+		{D755F530-3E0D-4724-8D37-1C071A620C8C} = {462B462F-796D-489C-A949-1B8CDC86FD51}
+		{5A13684C-8655-4DAF-90F7-B66C918B9068} = {462B462F-796D-489C-A949-1B8CDC86FD51}
+		{71E93442-22CF-4EDD-ACF0-510D51E6A352} = {90C163A8-0F5F-476C-BA9F-61B09FDBA91C}
+		{9F2667D0-59DF-49A6-9C9C-F10E3F150238} = {90C163A8-0F5F-476C-BA9F-61B09FDBA91C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {956BAA4E-C951-42F2-BF21-56DF92680234}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Example\Tests.Src\MoxTests.projitems*{043813e9-7837-462f-b436-4034d7f0ca1a}*SharedItemsImports = 13
+		DebugHost\DebugHost.Src\MoxDebugHost.projitems*{13c8d34d-1857-4c85-8ed0-b6053e65d2ce}*SharedItemsImports = 13
+		Mox\Mox.Src\Mox.projitems*{35452977-2d30-4197-8f11-fd8ea887b2ad}*SharedItemsImports = 13
+		Example\Tests.Src\MoxTests.projitems*{5a13684c-8655-4daf-90f7-b66c918b9068}*SharedItemsImports = 5
+		Mox\Mox.Src\Mox.projitems*{71e93442-22cf-4edd-acf0-510d51e6a352}*SharedItemsImports = 5
+		DebugHost\DebugHost.Src\MoxDebugHost.projitems*{9b9fe778-0b77-4889-ad38-a1b5bdaf7ce2}*SharedItemsImports = 5
+		Mox\Mox.Src\Mox.projitems*{9f2667d0-59df-49a6-9c9c-f10e3f150238}*SharedItemsImports = 4
+		DebugHost\DebugHost.Src\MoxDebugHost.projitems*{b149b67d-b30a-4eef-bb12-c42a611f8774}*SharedItemsImports = 5
+		Example\Tests.Src\MoxTests.projitems*{d755f530-3e0d-4724-8d37-1c071a620c8c}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
