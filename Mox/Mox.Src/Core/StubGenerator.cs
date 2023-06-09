@@ -34,7 +34,7 @@ namespace Mox.Core
                 return isolate.StubCache[method.MetadataToken];
             }
 #if DEBUG
-            Debug.WriteLine("    >>>> Generate stub for method:" + method.Name);
+            Debug.WriteLine("    >>>> Generate stub for method:" + method);
 #endif
             var signatureParamTypes = new List<Type>();
             if (!method.IsStatic)
@@ -155,7 +155,7 @@ namespace Mox.Core
                 return isolate.StubCache[method.MetadataToken];
             }
 #if DEBUG
-            Debug.WriteLine("    >>>>>> Generate stub for method:" + method.Name);
+            Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var thisType = constrainedType.MakeByRefType();
             var actualMethod = StubHelper.DevirtualizeMethod(constrainedType, method);
@@ -264,7 +264,7 @@ namespace Mox.Core
                 return isolate.StubCache[method.MetadataToken];
             }
 #if DEBUG
-            Debug.WriteLine("    >>>>>> Generate stub for method:" + method.Name);
+            Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var thisType = method.DeclaringType.IsInterface ? typeof(object) : method.DeclaringType;
             var signatureParamTypes = new List<Type>
@@ -476,7 +476,7 @@ namespace Mox.Core
                 return isolate.StubCache[method.MetadataToken];
             }
 #if DEBUG
-            Debug.WriteLine("    >>>>>> Generate stub for method:" + method.Name);
+            Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var stub = new DynamicMethod(
                 StubHelper.CreateStubNameForMethod("stub_ldftn", method),
@@ -558,7 +558,7 @@ namespace Mox.Core
                 return isolate.StubCache[method.MetadataToken];
             }
 #if DEBUG
-            Debug.WriteLine("    >>>>>> Generate stub for method:" + method.Name);
+            Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var stub = new DynamicMethod(
                 StubHelper.CreateStubNameForMethod("stub_ldvirtftn", method),

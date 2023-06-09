@@ -3,14 +3,14 @@ using System.Text;
 
 namespace Mox.Decompiler
 {
-    internal sealed class Instruction
+    internal sealed class ILInstruction
     {
         long offset;
         OpCode opcode;
         object operand;
 
-        Instruction previous;
-        Instruction next;
+        ILInstruction previous;
+        ILInstruction next;
 
         public long Offset
         {
@@ -28,13 +28,13 @@ namespace Mox.Decompiler
             internal set { operand = value; }
         }
 
-        public Instruction Previous
+        public ILInstruction Previous
         {
             get { return previous; }
             internal set { previous = value; }
         }
 
-        public Instruction Next
+        public ILInstruction Next
         {
             get { return next; }
             internal set { next = value; }
@@ -49,7 +49,7 @@ namespace Mox.Decompiler
                 switch (opcode.OperandType)
                 {
                     case OperandType.InlineSwitch:
-                        size += (1 + ((Instruction[])operand).Length) * 4;
+                        size += (1 + ((ILInstruction[])operand).Length) * 4;
                         break;
                     case OperandType.InlineI8:
                     case OperandType.InlineR:
@@ -79,7 +79,7 @@ namespace Mox.Decompiler
             }
         }
 
-        internal Instruction(long offset, OpCode opcode)
+        internal ILInstruction(long offset, OpCode opcode)
         {
             this.offset = offset;
             this.opcode = opcode;
@@ -105,10 +105,10 @@ namespace Mox.Decompiler
             {
                 case OperandType.ShortInlineBrTarget:
                 case OperandType.InlineBrTarget:
-                    AppendLabel(instruction, (Instruction)operand);
+                    AppendLabel(instruction, (ILInstruction)operand);
                     break;
                 case OperandType.InlineSwitch:
-                    var labels = (Instruction[])operand;
+                    var labels = (ILInstruction[])operand;
                     for (int i = 0; i < labels.Length; i++)
                     {
                         if (i > 0)
@@ -132,7 +132,7 @@ namespace Mox.Decompiler
             return instruction.ToString();
         }
 
-        static void AppendLabel(StringBuilder builder, Instruction instruction)
+        static void AppendLabel(StringBuilder builder, ILInstruction instruction)
         {
             builder.Append("IL_");
             builder.Append(instruction.offset.ToString("x4"));

@@ -9,14 +9,14 @@ namespace Mox.Decompiler
 {
     internal class ILParser
     {
-        public static List<Instruction> ParseMethod(MethodBase method)
+        public static List<ILInstruction> ParseMethod(MethodBase method)
         {
             var reader = new ILParser(method);
             reader.ReadInstructions();
             return reader.InstructionList;
         }
 
-        public static List<Instruction> ParseDynamicMethod(DynamicMethod method, Type[] args, IList<LocalVariableInfo> locals)
+        public static List<ILInstruction> ParseDynamicMethod(DynamicMethod method, Type[] args, IList<LocalVariableInfo> locals)
         {
             var reader = new ILParser(method, args, locals);
             reader.ReadInstructions();
@@ -59,7 +59,7 @@ namespace Mox.Decompiler
         readonly ParameterInfo ThisInfo;
         readonly ParameterInfo[] Parameters;
         readonly IList<LocalVariableInfo> LocalVariables;
-        readonly List<Instruction> InstructionList;
+        readonly List<ILInstruction> InstructionList;
 
         ILParser(MethodBase method)
         {
@@ -96,7 +96,7 @@ namespace Mox.Decompiler
             LocalVariables = body.LocalVariables;
             Module = method.Module;
             ILStreamReader = new BinaryReader(new MemoryStream(bytes));
-            InstructionList = new List<Instruction>((bytes.Length + 1) / 2);
+            InstructionList = new List<ILInstruction>((bytes.Length + 1) / 2);
         }
 
         ILParser(DynamicMethod method, Type[] paramTypes, IList<LocalVariableInfo> locals)
@@ -131,16 +131,16 @@ namespace Mox.Decompiler
             MethodArguments = paramTypes;
             Module = new DynamicModule(ilGenerator);
             ILStreamReader = new BinaryReader(new MemoryStream(bytes));
-            InstructionList = new List<Instruction>((bytes.Length + 1) / 2);
+            InstructionList = new List<ILInstruction>((bytes.Length + 1) / 2);
         }
 
         void ReadInstructions()
         {
-            Instruction previous = null;
+            ILInstruction previous = null;
 
             while (ILStreamReader.BaseStream.Position < ILStreamReader.BaseStream.Length)
             {
-                var instruction = new Instruction(ILStreamReader.BaseStream.Position, ReadOpCode());
+                var instruction = new ILInstruction(ILStreamReader.BaseStream.Position, ReadOpCode());
 
                 ReadOperand(instruction);
 
@@ -157,7 +157,7 @@ namespace Mox.Decompiler
             ResolveBranches();
         }
 
-        void ReadOperand(Instruction instruction)
+        void ReadOperand(ILInstruction instruction)
         {
             switch (instruction.OpCode.OperandType)
             {
@@ -238,7 +238,7 @@ namespace Mox.Decompiler
                         break;
                     case OperandType.InlineSwitch:
                         var offsets = (int[])instruction.Operand;
-                        var branches = new Instruction[offsets.Length];
+                        var branches = new ILInstruction[offsets.Length];
                         for (int j = 0; j < offsets.Length; j++)
                         {
                             branches[j] = GetInstruction(InstructionList, offsets[j]);
@@ -250,7 +250,7 @@ namespace Mox.Decompiler
             }
         }
 
-        static Instruction GetInstruction(List<Instruction> instructions, long offset)
+        static ILInstruction GetInstruction(List<ILInstruction> instructions, long offset)
         {
             var size = instructions.Count;
             if (offset < 0 || offset > instructions[size - 1].Offset)
@@ -284,7 +284,7 @@ namespace Mox.Decompiler
             return null;
         }
 
-        object GetVariable(Instruction instruction, int index)
+        object GetVariable(ILInstruction instruction, int index)
         {
             return TargetsLocalVariable(instruction.OpCode)
                 ? GetLocalVariable(index) as object

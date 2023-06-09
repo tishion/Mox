@@ -27,11 +27,11 @@ namespace Mox.Extensions
             return methodInfo.GetBaseDefinition().DeclaringType != methodInfo.DeclaringType;
         }
 
-        public static List<Instruction> GetILInstructions(this MethodBase @this)
+        public static List<ILInstruction> GetILInstructions(this MethodBase @this)
         {
             if (null == @this)
             {
-                return new List<Instruction>();
+                return new List<ILInstruction>();
             }
 
             return ILParser.ParseMethod(@this);

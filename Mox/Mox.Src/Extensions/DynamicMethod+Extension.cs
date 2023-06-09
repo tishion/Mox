@@ -10,11 +10,11 @@ namespace Mox.Extensions
     {
         private static readonly MethodInfo GetMethodDescriptor_MethodInfo = typeof(DynamicMethod).GetMethod("GetMethodDescriptor", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public static List<Instruction> GetILInstructions(this DynamicMethod @this, Type[] args, IList<System.Reflection.LocalVariableInfo> locals)
+        public static List<ILInstruction> GetILInstructions(this DynamicMethod @this, Type[] args, IList<System.Reflection.LocalVariableInfo> locals)
         {
             if (null == @this)
             {
-                return new List<Instruction>();
+                return new List<ILInstruction>();
             }
 
             return ILParser.ParseDynamicMethod(@this, args, locals);

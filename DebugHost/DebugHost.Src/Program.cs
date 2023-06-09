@@ -76,11 +76,11 @@ namespace MoxDebugHost
     {
         static void Main(string[] args)
         {
-#if NETFRAMEWORK
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
-#elif NETCOREAPP
-            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-#endif
+//#if NETFRAMEWORK
+//            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+//#elif NETCOREAPP
+//            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+//#endif
             Console.WriteLine("Hello, World!");
 
             var result = "";
@@ -94,10 +94,10 @@ namespace MoxDebugHost
                     Console.WriteLine("====== in mocked NetworkInterface.GetAllNetworkInterfaces!");
 
                     return new NetworkInterface[] {
-                            new MockedNetworkInterface("es2", "001122334455"),
-                            new MockedNetworkInterface("es1", "101122334455"),
-                            new MockedNetworkInterface("en1", "201122334455"),
-                            new MockedNetworkInterface("en0", mockedAddress),
+                            //new MockedNetworkInterface("es2", "001122334455"),
+                            //new MockedNetworkInterface("es1", "101122334455"),
+                            //new MockedNetworkInterface("en1", "201122334455"),
+                            //new MockedNetworkInterface("en0", mockedAddress),
                     };
                 });
 

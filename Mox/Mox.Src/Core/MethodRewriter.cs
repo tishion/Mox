@@ -37,7 +37,7 @@ namespace Mox.Core
         public static MethodRewriter CreateRewriter(MethodBase method, object target, Int64 ptr, bool isInterfaceDispatch)
         {
 #if DEBUG
-            Debug.WriteLine("+++ Creating Rewriter for method: " + method.Name);
+            Debug.WriteLine("+++ Creating Rewriter for method: " + method);
 #endif
             return new MethodRewriter
             {
@@ -55,7 +55,7 @@ namespace Mox.Core
             if (index < 0)
             {
 #if DEBUG
-                Debug.WriteLine("+++ Rewriting method:" + Method.Name);
+                Debug.WriteLine("+++ Rewriting method:" + Method);
 #endif
                 dynamicMethod = DoRewrite();
 #if DEBUG
@@ -65,7 +65,7 @@ namespace Mox.Core
             else
             {
 #if DEBUG
-                Debug.WriteLine("+++ Redirecting to replacement for method: " + Method.Name);
+                Debug.WriteLine("+++ Redirecting to replacement for method: " + Method);
 #endif
                 dynamicMethod = DoRedirect(index);
 #if DEBUG
@@ -133,8 +133,8 @@ namespace Mox.Core
             }
 
             var ifTargets = originalInstructions
-                .Where(i => i.Operand as Instruction != null)
-                .Select(i => i.Operand as Instruction)
+                .Where(i => i.Operand as ILInstruction != null)
+                .Select(i => i.Operand as ILInstruction)
                 .Distinct();
             foreach (var instruction in ifTargets)
             {
@@ -142,8 +142,8 @@ namespace Mox.Core
             }
 
             var switchTargets = originalInstructions
-                .Where(i => i.Operand as Instruction[] != null)
-                .Select(i => i.Operand as Instruction[])
+                .Where(i => i.Operand as ILInstruction[] != null)
+                .Select(i => i.Operand as ILInstruction[])
                 .Distinct();
             foreach (var switchInstructions in switchTargets)
             {
@@ -283,7 +283,7 @@ namespace Mox.Core
             return dynamicMethod;
         }
 
-        private void EmitILForExceptionHandlers(ILGenerator ilGenerator, Instruction instruction, List<ExceptionHandler> handlers)
+        private void EmitILForExceptionHandlers(ILGenerator ilGenerator, ILInstruction instruction, List<ExceptionHandler> handlers)
         {
             var tryBlocks = handlers.Where(h => h.TryStart == instruction.Offset).GroupBy(h => h.TryEnd);
             foreach (var tryBlock in tryBlocks)
@@ -341,7 +341,7 @@ namespace Mox.Core
         private void EmitThisPointerAccessForBoxedValueType(ILGenerator ilGenerator)
             => ilGenerator.Emit(OpCodes.Call, typeof(Unsafe).GetMethod("Unbox").MakeGenericMethod(Method.DeclaringType));
 
-        private void EmitILForInlineNone(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineNone(ILGenerator ilGenerator, ILInstruction instruction)
         {
             ilGenerator.Emit(instruction.OpCode);
             if (IsInterfaceDispatch && Method.DeclaringType.IsValueType && instruction.OpCode == OpCodes.Ldarg_0)
@@ -350,13 +350,13 @@ namespace Mox.Core
             }
         }
 
-        private void EmitILForInlineI(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineI(ILGenerator ilGenerator, ILInstruction instruction)
             => ilGenerator.Emit(instruction.OpCode, (int)instruction.Operand);
 
-        private void EmitILForInlineI8(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineI8(ILGenerator ilGenerator, ILInstruction instruction)
             => ilGenerator.Emit(instruction.OpCode, (long)instruction.Operand);
 
-        private void EmitILForShortInlineI(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForShortInlineI(ILGenerator ilGenerator, ILInstruction instruction)
         {
             if (instruction.OpCode == OpCodes.Ldc_I4_S)
             {
@@ -368,19 +368,19 @@ namespace Mox.Core
             }
         }
 
-        private void EmitILForInlineR(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineR(ILGenerator ilGenerator, ILInstruction instruction)
             => ilGenerator.Emit(instruction.OpCode, (double)instruction.Operand);
 
-        private void EmitILForShortInlineR(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForShortInlineR(ILGenerator ilGenerator, ILInstruction instruction)
             => ilGenerator.Emit(instruction.OpCode, (float)instruction.Operand);
 
-        private void EmitILForInlineString(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineString(ILGenerator ilGenerator, ILInstruction instruction)
             => ilGenerator.Emit(instruction.OpCode, (string)instruction.Operand);
 
         private void EmitILForInlineBrTarget(ILGenerator ilGenerator,
-            Instruction instruction, Dictionary<long, Label> targetInstructions)
+            ILInstruction instruction, Dictionary<long, Label> targetInstructions)
         {
-            var targetLabel = targetInstructions[(instruction.Operand as Instruction).Offset];
+            var targetLabel = targetInstructions[(instruction.Operand as ILInstruction).Offset];
 
             var opCode = instruction.OpCode;
 
@@ -453,9 +453,9 @@ namespace Mox.Core
         }
 
         private void EmitILForInlineSwitch(ILGenerator ilGenerator,
-            Instruction instruction, Dictionary<long, Label> targetInstructions)
+            ILInstruction instruction, Dictionary<long, Label> targetInstructions)
         {
-            var switchInstructions = (Instruction[])instruction.Operand;
+            var switchInstructions = (ILInstruction[])instruction.Operand;
             var targetLabels = new Label[switchInstructions.Length];
             for (var i = 0; i < switchInstructions.Length; i++)
             {
@@ -465,7 +465,7 @@ namespace Mox.Core
             ilGenerator.Emit(instruction.OpCode, targetLabels);
         }
 
-        private void EmitILForInlineVar(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineVar(ILGenerator ilGenerator, ILInstruction instruction)
         {
             int index;
             if (instruction.OpCode.Name.Contains("loc"))
@@ -493,7 +493,7 @@ namespace Mox.Core
             }
         }
 
-        private void EmitILForType(ILGenerator ilGenerator, Instruction instruction, TypeInfo typeInfo)
+        private void EmitILForType(ILGenerator ilGenerator, ILInstruction instruction, TypeInfo typeInfo)
         {
             if (instruction.OpCode == OpCodes.Constrained)
             {
@@ -504,7 +504,7 @@ namespace Mox.Core
             ilGenerator.Emit(instruction.OpCode, typeInfo);
         }
 
-        private void EmitILForConstructor(ILGenerator ilGenerator, Instruction instruction, ConstructorInfo constructorInfo)
+        private void EmitILForConstructor(ILGenerator ilGenerator, ILInstruction instruction, ConstructorInfo constructorInfo)
         {
             if (constructorInfo.IsClrBuiltInAssembly())
             {
@@ -545,7 +545,7 @@ namespace Mox.Core
             ilGenerator.Emit(instruction.OpCode, constructorInfo);
         }
 
-        private void EmitILForMethod(ILGenerator ilGenerator, Instruction instruction, MethodInfo methodInfo)
+        private void EmitILForMethod(ILGenerator ilGenerator, ILInstruction instruction, MethodInfo methodInfo)
         {
             if (methodInfo.IsClrBuiltInAssembly())
             {
@@ -595,7 +595,7 @@ namespace Mox.Core
             ilGenerator.Emit(instruction.OpCode, methodInfo);
         }
 
-        private void EmitILForInlineMember(ILGenerator ilGenerator, Instruction instruction)
+        private void EmitILForInlineMember(ILGenerator ilGenerator, ILInstruction instruction)
         {
             var memberInfo = (MemberInfo)instruction.Operand;
             if (memberInfo.MemberType == MemberTypes.Field)
@@ -621,7 +621,7 @@ namespace Mox.Core
         }
 
 #if DEBUG
-        private void DebugOutputMethodBody(MethodBase m,  List<Instruction> ilList, string prefix = "")
+        private void DebugOutputMethodBody(MethodBase m,  List<ILInstruction> ilList, string prefix = "")
         {
             Debug.WriteLine($"{prefix}+++ ${m}");
             foreach (var instruction in ilList)
