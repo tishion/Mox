@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net461</TargetFramework>
+		<TargetFramework>net462</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Mox\Mox.NETStandard\Mox.NETStandard.csproj" />
+		<ProjectReference Include="..\..\Mox\Mox.NETStandard\Mox.NETStandard.csproj" />
 	</ItemGroup>
 
 	<Import Project="..\Tests.Src\MoxTests.projitems" Label="Shared" />
