@@ -3,7 +3,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-
 namespace Mox.Utils
 {
     internal static class MethodHelper

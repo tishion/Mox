@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Mox.Decompiler;
+
+using Mox.Disassembler;
 
 namespace Mox.Extensions
 {
@@ -27,14 +28,14 @@ namespace Mox.Extensions
             return methodInfo.GetBaseDefinition().DeclaringType != methodInfo.DeclaringType;
         }
 
-        public static List<Instruction> GetILInstructions(this MethodBase @this)
+        public static IList<Instruction> GetILInstructions(this MethodBase @this)
         {
             if (null == @this)
             {
                 return new List<Instruction>();
             }
 
-            return ILParser.ParseMethod(@this);
+            return @this.GetInstructions();
         }
     }
 }

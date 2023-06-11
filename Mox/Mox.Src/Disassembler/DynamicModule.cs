@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Mox.Decompiler
+namespace Mox.Disassembler
 {
     internal class DynamicModule : Module
     {

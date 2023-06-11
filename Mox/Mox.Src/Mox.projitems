@@ -9,6 +9,11 @@
     <Import_RootNamespace>Mox</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Disassembler\DynamicModule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disassembler\ByteBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disassembler\Disassembler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disassembler\Instruction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disassembler\MethodBodyReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\MethodHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\ExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\MethodRewriter.cs" />
@@ -16,13 +21,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\StubGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Detour+Replace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\Detour.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Dictionary+Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DynamicMethod+Extension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ILGenerator+Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\MethodBase+Extension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Decompiler\DynamicModule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Decompiler\Instruction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Decompiler\MethodBodyReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Isolate+Internal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Isolate.cs" />
   </ItemGroup>

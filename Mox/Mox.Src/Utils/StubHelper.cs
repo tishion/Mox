@@ -90,9 +90,9 @@ namespace Mox.Utils
             || method.DeclaringType.FullName.StartsWith("System.Runtime.Intrinsics");
 
         public static string CreateStubNameForMethod(string prefix, MethodBase method) =>
-            prefix + "_" + GetFullMethodName(method);
+            prefix + "_" + GetMethodSignature(method);
 
-        public static string GetFullMethodName(MethodBase method)
+        public static string GetMethodSignature(MethodBase method)
         {
             var name = method.DeclaringType.ToString();
             name += "_";
@@ -111,6 +111,8 @@ namespace Mox.Utils
 
             return name;
         }
+
+        public static string GetMethodFullName(MethodBase method) => $"{method.DeclaringType}.{method.Name}";
 
         public static void BreakPointSlot()
         {

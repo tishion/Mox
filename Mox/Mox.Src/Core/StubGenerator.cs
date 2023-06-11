@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using Mox.Extensions;
+
 using Mox.Utils;
 
 namespace Mox.Core
@@ -51,7 +51,7 @@ namespace Mox.Core
             var returnType = method.IsConstructor ? typeof(void) : (method as MethodInfo).ReturnType;
 
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_call", method),
+                StubHelper.CreateStubNameForMethod("moxstub_call", method),
                 returnType,
                 signatureParamTypes.ToArray(),
                 StubHelper.GetOwningModule(),
@@ -166,7 +166,7 @@ namespace Mox.Core
             signatureParamTypes.AddRange(method.GetParameters().Select(p => p.ParameterType));
 
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_callvirt", method),
+                StubHelper.CreateStubNameForMethod("moxstub_callvirt", method),
                 method.ReturnType,
                 signatureParamTypes.ToArray(),
                 StubHelper.GetOwningModule(),
@@ -274,7 +274,7 @@ namespace Mox.Core
             signatureParamTypes.AddRange(method.GetParameters().Select(p => p.ParameterType));
 
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_callvirt", method),
+                StubHelper.CreateStubNameForMethod("moxstub_callvirt", method),
                 method.ReturnType,
                 signatureParamTypes.ToArray(),
                 StubHelper.GetOwningModule(),
@@ -376,7 +376,7 @@ namespace Mox.Core
             signatureParamTypes.AddRange(constructor.GetParameters().Select(p => p.ParameterType));
 
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_newobj", constructor),
+                StubHelper.CreateStubNameForMethod("moxstub_newobj", constructor),
                 constructor.DeclaringType,
                 signatureParamTypes.Skip(1).ToArray(),
                 StubHelper.GetOwningModule(),
@@ -479,7 +479,7 @@ namespace Mox.Core
             Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_ldftn", method),
+                StubHelper.CreateStubNameForMethod("moxstub_ldftn", method),
                 typeof(IntPtr),
                 new Type[] { },
                 StubHelper.GetOwningModule(),
@@ -561,7 +561,7 @@ namespace Mox.Core
             Debug.WriteLine("    >>>>>> Generate stub for method:" + method);
 #endif
             var stub = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("stub_ldvirtftn", method),
+                StubHelper.CreateStubNameForMethod("moxstub_ldvirtftn", method),
                 typeof(IntPtr),
                 new Type[] { method.DeclaringType.IsInterface ? typeof(object) : method.DeclaringType },
                 StubHelper.GetOwningModule(),
@@ -625,12 +625,12 @@ namespace Mox.Core
 #if DEBUG
         static void DebugOutputStubBody(DynamicMethod stub, Type[] args, IList<LocalVariableInfo> locals, string prefix = "")
         {
-            Debug.WriteLine($"{prefix}+++ ${stub}");
-            foreach (var instruction in stub.GetILInstructions(args, locals))
-            {
-                Debug.WriteLine($"{prefix}    ${instruction}");
-            }
-            Debug.WriteLine($"{prefix}--- ${stub}");
+            //Debug.WriteLine($"{prefix}+++ ${stub}");
+            //foreach (var instruction in stub.GetILInstructions(args, locals))
+            //{
+            //    Debug.WriteLine($"{prefix}    ${instruction}");
+            //}
+            //Debug.WriteLine($"{prefix}--- ${stub}");
         }
 #endif
     }

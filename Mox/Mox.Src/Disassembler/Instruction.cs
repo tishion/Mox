@@ -1,18 +1,20 @@
-﻿using System.Reflection.Emit;
+using System;
+using System.Reflection.Emit;
 using System.Text;
 
-namespace Mox.Decompiler
+namespace Mox.Disassembler
 {
-    internal sealed class Instruction
+    public sealed class Instruction
     {
-        long offset;
+
+        int offset;
         OpCode opcode;
         object operand;
 
         Instruction previous;
         Instruction next;
 
-        public long Offset
+        public int Offset
         {
             get { return offset; }
         }
@@ -79,7 +81,7 @@ namespace Mox.Decompiler
             }
         }
 
-        internal Instruction(long offset, OpCode opcode)
+        internal Instruction(int offset, OpCode opcode)
         {
             this.offset = offset;
             this.opcode = opcode;
@@ -95,9 +97,7 @@ namespace Mox.Decompiler
             instruction.Append(opcode.Name);
 
             if (operand == null)
-            {
                 return instruction.ToString();
-            }
 
             instruction.Append(' ');
 
@@ -112,9 +112,7 @@ namespace Mox.Decompiler
                     for (int i = 0; i < labels.Length; i++)
                     {
                         if (i > 0)
-                        {
                             instruction.Append(',');
-                        }
 
                         AppendLabel(instruction, labels[i]);
                     }

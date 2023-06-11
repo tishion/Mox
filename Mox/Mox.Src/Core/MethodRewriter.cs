@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
+using Mox.Disassembler;
 using Mox.Extensions;
-using Mox.Decompiler;
 using Mox.Utils;
 
 namespace Mox.Core
@@ -97,12 +97,12 @@ namespace Mox.Core
 
 #if DEBUG
             Debug.WriteLine("+++ Original:");
-            DebugOutputMethodBody(Method, Method.GetILInstructions());
+            DebugOutputMethodBody(Method);
 #endif
 
             // create dynamic method
             var dynamicMethod = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("impl", Method),
+                StubHelper.CreateStubNameForMethod("moximpl", Method),
                 returnType,
                 parameterTypes.ToArray(),
                 StubHelper.GetOwningModule(),
@@ -132,24 +132,24 @@ namespace Mox.Core
                 locals.Add(ilGenerator.DeclareLocal(local.LocalType, local.IsPinned));
             }
 
-            var ifTargets = originalInstructions
+            var singleTargetBranchInstcutions = originalInstructions
                 .Where(i => i.Operand as Instruction != null)
-                .Select(i => i.Operand as Instruction)
-                .Distinct();
-            foreach (var instruction in ifTargets)
-            {
-                targetInstructions.TryAdd(instruction.Offset, ilGenerator.DefineLabel());
-            }
+                .Select(i => i.Operand as Instruction);
 
-            var switchTargets = originalInstructions
+            var multipleTargetBranchInstcutions = originalInstructions
                 .Where(i => i.Operand as Instruction[] != null)
                 .Select(i => i.Operand as Instruction[])
-                .Distinct();
-            foreach (var switchInstructions in switchTargets)
+                .SelectMany(i => i);
+
+            var branchInstructions = singleTargetBranchInstcutions
+                .Concat(multipleTargetBranchInstcutions)
+                .Distinct()
+                .OrderBy(i => i.Offset);
+            foreach (var instruction in branchInstructions)
             {
-                foreach (var instruction in switchInstructions)
+                if (!targetInstructions.ContainsKey(instruction.Offset))
                 {
-                    targetInstructions.TryAdd(instruction.Offset, ilGenerator.DefineLabel());
+                    targetInstructions.Add(instruction.Offset, ilGenerator.DefineLabel());
                 }
             }
 
@@ -216,8 +216,7 @@ namespace Mox.Core
 #if DEBUG
             Debug.WriteLine("+++ Rewritten:");
             var args = Method.IsConstructor ? new Type[] { } : Method.GetGenericArguments();
-            var ilList = dynamicMethod.GetILInstructions(args, locals);
-            DebugOutputMethodBody(dynamicMethod, ilList);
+            DebugOutputDynamicMethodBody(dynamicMethod, args, locals);
 #endif
 
             return dynamicMethod;
@@ -242,12 +241,12 @@ namespace Mox.Core
 
 #if DEBUG
             Debug.WriteLine("+++ Original:");
-            DebugOutputMethodBody(Method, Method.GetILInstructions());
+            DebugOutputMethodBody(Method);
 #endif
 
             // create dynamic method
             var dynamicMethod = new DynamicMethod(
-                StubHelper.CreateStubNameForMethod("impl", Method),
+                StubHelper.CreateStubNameForMethod("moximpl", Method),
                 returnType,
                 parameterTypes.ToArray(),
                 StubHelper.GetOwningModule(),
@@ -276,8 +275,7 @@ namespace Mox.Core
 #if DEBUG
             Debug.WriteLine("+++ Rewritten:");
             var args = Method.IsConstructor ? new Type[] { } : Method.GetGenericArguments();
-            var ilList = dynamicMethod.GetILInstructions(args, locals);
-            DebugOutputMethodBody(dynamicMethod, ilList);
+            DebugOutputDynamicMethodBody(dynamicMethod, args, locals);
 #endif
 
             return dynamicMethod;
@@ -380,7 +378,8 @@ namespace Mox.Core
         private void EmitILForInlineBrTarget(ILGenerator ilGenerator,
             Instruction instruction, Dictionary<long, Label> targetInstructions)
         {
-            var targetLabel = targetInstructions[(instruction.Operand as Instruction).Offset];
+            var targetInstruction = instruction.Operand as Instruction;
+            var targetLabel = targetInstructions[targetInstruction.Offset];
 
             var opCode = instruction.OpCode;
 
@@ -455,11 +454,12 @@ namespace Mox.Core
         private void EmitILForInlineSwitch(ILGenerator ilGenerator,
             Instruction instruction, Dictionary<long, Label> targetInstructions)
         {
-            var switchInstructions = (Instruction[])instruction.Operand;
-            var targetLabels = new Label[switchInstructions.Length];
-            for (var i = 0; i < switchInstructions.Length; i++)
+            var targetInstructionList = (Instruction[])instruction.Operand;
+            var targetLabels = new Label[targetInstructionList.Length];
+
+            for (var i = 0; i < targetInstructionList.Length; i++)
             {
-                targetLabels[i] = targetInstructions[switchInstructions[i].Offset];
+                targetLabels[i] = targetInstructions[targetInstructionList[i].Offset];
             }
 
             ilGenerator.Emit(instruction.OpCode, targetLabels);
@@ -568,6 +568,11 @@ namespace Mox.Core
 
             if (instruction.OpCode == OpCodes.Callvirt)
             {
+                if (StubHelper.GetMethodFullName(methodInfo) == "System.String.get_Length")
+                {
+                    ilGenerator.Emit(OpCodes.Break);
+                }
+
                 if (ConstrainedType != null)
                 {
                     ilGenerator.Emit(OpCodes.Call, StubGenerator.GenerateStubForVirtualCall(Isolate, methodInfo, ConstrainedType));
@@ -621,10 +626,20 @@ namespace Mox.Core
         }
 
 #if DEBUG
-        private void DebugOutputMethodBody(MethodBase m, List<Instruction> ilList, string prefix = "")
+        private void DebugOutputMethodBody(MethodBase m, string prefix = "")
         {
             Debug.WriteLine($"{prefix}+++ ${m}");
-            foreach (var instruction in ilList)
+            foreach (var instruction in m.GetILInstructions())
+            {
+                Debug.WriteLine($"{prefix}    {instruction}");
+            }
+            Debug.WriteLine($"{prefix}--- ${m}");
+        }
+
+        private void DebugOutputDynamicMethodBody(DynamicMethod m, Type[] args, IList<LocalVariableInfo> locals, string prefix = "")
+        {
+            Debug.WriteLine($"{prefix}+++ ${m}");
+            foreach (var instruction in m.GetILInstructions(args, locals))
             {
                 Debug.WriteLine($"{prefix}    {instruction}");
             }
